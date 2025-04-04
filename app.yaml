@@ -1,4 +1,4 @@
-runtime: python39
+runtime: python310
 entrypoint: gunicorn -b :$PORT app:app --timeout 300
 
 env_variables:
