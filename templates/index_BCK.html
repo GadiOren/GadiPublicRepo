@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניתוח שיחה</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl; /* משאירים את כיוון הכתיבה מימין לשמאל */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;              /* ממרכז את הקופסה עצמה בעמוד */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: #f9f9f9;
+            text-align: center;        /* אם תרצה שהכותרות והכפתורים יישארו במרכז */
+        }
+
+        /* רק התוכן של #results מיושר לימין */
+        #results {
+            text-align: right;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            font-weight: bold;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>העלאת קובץ שמע</h2>
+        <input type="file" id="fileInput" accept="audio/*">
+        <button onclick="uploadFile()">העלה ועבד</button>
+        <p id="status" class="hidden">סטטוס: <span id="statusText"></span></p>
+
+        <div id="results" class="hidden">
+            <h3>📜 תוצאה:</h3>
+            <p><strong>כותרת:</strong> <span id="title"></span></p>
+            <p><strong>סיכום:</strong> <span id="summary"></span></p>
+            <p><strong>דוברים:</strong> <span id="speakers"></span></p>
+            <pre id="transcript"></pre>
+            <pre id="correctedTranscript"></pre>
+        </div>
+    </div>
+
+    <script>
+        let processingId = null;
+
+        function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            if (!fileInput.files.length) {
+                alert("אנא בחר קובץ.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            document.getElementById("status").classList.remove("hidden");
+            document.getElementById("statusText").textContent = "מעבד...";
+
+            fetch("/api/upload", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                processingId = data.processingId;
+                checkStatus();
+            })
+            .catch(error => console.error("שגיאה בהעלאה:", error));
+        }
+
+        function checkStatus() {
+            if (!processingId) return;
+
+            fetch(`/api/status/${processingId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("statusText").textContent = data.status;
+
+                if (data.status === "✅ הושלם!") {
+                    document.getElementById("results").classList.remove("hidden");
+                    document.getElementById("title").textContent = data.result.title;
+                    document.getElementById("summary").textContent = data.result.summary;
+                    document.getElementById("speakers").textContent = data.result.speakers.join(", ");
+                    document.getElementById("transcript").textContent = data.result.transcript;
+                    document.getElementById("correctedTranscript").textContent = data.result.correctedTranscript;
+
+                } else {
+                    setTimeout(checkStatus, 5000);
+                }
+            })
+            .catch(error => console.error("שגיאה בבדיקת סטטוס:", error));
+        }
+    </script>
+
+</body>
+</html>

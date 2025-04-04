@@ -1,0 +1,2 @@
+[console_scripts]
+captain = captain.__main__:console
