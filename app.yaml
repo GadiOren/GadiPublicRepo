@@ -1,0 +1,6 @@
+runtime: python39
+entrypoint: gunicorn -b :$PORT app:app --timeout 300
+
+env_variables:
+  OPENAI_API_KEY: "YOUR_OPENAI_API_KEY"  # הזן את מפתח ה-API שלך בסביבת הפריסה, לא בקוד
+  HUGGING_FACE_TOKEN: "YOUR_HUGGING_FACE_TOKEN"  # הזן את הטוקן שלך בסביבת הפריסה

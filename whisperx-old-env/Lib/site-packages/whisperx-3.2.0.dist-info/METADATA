@@ -1,0 +1,20 @@
+Metadata-Version: 2.1
+Name: whisperx
+Version: 3.2.0
+Summary: Time-Accurate Automatic Speech Recognition using Whisper.
+Home-page: https://github.com/m-bain/whisperx
+Author: Max Bain
+License: MIT
+Requires-Python: >=3.8
+License-File: LICENSE
+Requires-Dist: torch>=2
+Requires-Dist: torchaudio>=2
+Requires-Dist: faster-whisper==1.0.0
+Requires-Dist: ctranslate2==4.4.0
+Requires-Dist: transformers
+Requires-Dist: pandas
+Requires-Dist: setuptools>=65
+Requires-Dist: nltk
+Requires-Dist: pyannote.audio==3.1.1
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"

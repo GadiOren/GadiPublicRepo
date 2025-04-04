@@ -1,0 +1,9 @@
+torch>=1.7.0
+
+[dev]
+coverage
+flake8
+mypy
+onnxruntime
+resampy==0.2.2
+pdoc3
