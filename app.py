@@ -50,4 +50,5 @@ def get_status(processing_id):
 
 if __name__ == "__main__":
     #app.run(host="0.0.0.0", port=5000, debug=True)
+    print("Running app.py")
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
