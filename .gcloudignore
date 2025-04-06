@@ -1,27 +1,39 @@
-# קבצים ותיקיות של גיט#
+# ניהול גרסאות וקבצים מערכתיים
 .git/
 .gitignore
 .gcloudignore
 
-# סביבות וירטואליות#
+# סביבת וירטואלית
 venv/
-.venv/
 env/
-ENV/
-whisperx-old-env/
+.venv/
+new_env/
+venv_new/
+venv_clean/
 
-# קבצי cache ומחוללים של Python#
-__pycache__/
-*.pyc
-*.pyo
 
-# תיקיות בדיקה, תיעוד וקבצים שאינם נדרשים להרצה#
+.idea/
 tests/
 docs/
+audio_files/
+output/
+temp/
+uploads/
+whisperx-old-env/
+ffmpeg/
+
+
+# קבצים מהקומפילציה
+*.pyc
+__pycache__/
+
+# קבצי סביבה אישית
+.env
+
+# תיקיות בדיקה ותיעוד (אם אינך צריך אותם בפריסה)
+
+*.log
 *.md
 
-# קבצי לוג ותוצרים זמניים#
-*.log
-*.tmp
 
-# תיקיות נוספות שאינן נחוצות – הוסף כאן כל תיקייה גדולה אחרת#
+

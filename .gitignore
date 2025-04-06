@@ -1,1 +1,28 @@
+# הסרת קבצי ניהול גרסאות
+.git
+.gitignore
+
+# הסרת סביבת הוירטואלית
+venv/
+env/
+
+# הסרת קבצי pyc וקבצי __pycache__
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# הסרת קבצי סביבה אישית
 .env
+
+# הסרת תיקיות בדיקה ותיעוד (אם קיימות)
+tests/
+docs/
+audio_files/
+output/
+temp/
+uploads/
+whisperx-old-env/
+
+# אפשר להוסיף עוד חריגות לפי הצורך
+*.log
