@@ -2,6 +2,7 @@
 .git/
 .gcloudignore
 GadiPublicRepo.git/
+.gitignore
 
 # הסרת סביבת הוירטואלית
 venv/
@@ -10,7 +11,6 @@ new_env/
 .venv/
 venv_new/
 venv_clean/
-
 
 # הסרת קבצי pyc וקבצי __pycache__
 *.pyc
@@ -37,3 +37,4 @@ ffmpeg/
 *.log
 *.md
 
+venv_clean/ 
