@@ -5,6 +5,10 @@
 # הסרת סביבת הוירטואלית
 venv/
 env/
+new_env/
+.venv/
+venv_new/
+venv_clean/
 
 # הסרת קבצי pyc וקבצי __pycache__
 *.pyc
