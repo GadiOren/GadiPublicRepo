@@ -1,6 +1,6 @@
 # הסרת קבצי ניהול גרסאות
-.git
-.gitignore
+.git/
+.gcloudignore
 
 # הסרת סביבת הוירטואלית
 venv/
@@ -9,6 +9,7 @@ new_env/
 .venv/
 venv_new/
 venv_clean/
+
 
 # הסרת קבצי pyc וקבצי __pycache__
 *.pyc
@@ -27,6 +28,9 @@ output/
 temp/
 uploads/
 whisperx-old-env/
+ffmpeg/
+
 
 # אפשר להוסיף עוד חריגות לפי הצורך
 *.log
+*.md
