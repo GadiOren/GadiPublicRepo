@@ -1,6 +1,7 @@
 # הסרת קבצי ניהול גרסאות
 .git/
 .gcloudignore
+GadiPublicRepo.git/
 
 # הסרת סביבת הוירטואלית
 venv/
