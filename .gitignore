@@ -3,6 +3,7 @@
 .gcloudignore
 GadiPublicRepo.git/
 .gitignore
+replacements.txt
 
 # הסרת סביבת הוירטואלית
 venv/
