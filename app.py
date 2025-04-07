@@ -7,10 +7,18 @@ from process_audio import AudioProcessor
 
 app = Flask(__name__)
 
+print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ # טעינת משתני סביבה")
 # טעינת משתני סביבה
-load_dotenv()
+#load_dotenv()
+load_dotenv("replacements.txt")
+print("UPLOAD_FOLDER:", os.getenv("UPLOAD_FOLDER"))
+
+print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ # סוף טעינת משתני סביבה")
+
 UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", "uploads")
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+#os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ # UPLOAD_FOLDER  " + UPLOAD_FOLDER)
+
 
 # מילון לניהול סטטוס העיבוד
 processing_status = {}

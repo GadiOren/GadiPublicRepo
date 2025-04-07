@@ -18,7 +18,6 @@ docs/
 audio_files/
 output/
 temp/
-uploads/
 whisperx-old-env/
 ffmpeg/
 

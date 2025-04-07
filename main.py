@@ -28,7 +28,8 @@ job_results = {}
 
 # יצירת תיקייה זמנית לאחסון קבצים
 TEMP_DIR = "temp"
-os.makedirs(TEMP_DIR, exist_ok=True)
+print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ STARTING")
+#os.makedirs(TEMP_DIR, exist_ok=True)
 
 
 # Endpoint לטיפול בבקשות ל-favicon – מפנה את הבקשה לקובץ ה-ICO שב-static
