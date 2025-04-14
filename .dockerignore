@@ -1,0 +1,40 @@
+# ניהול גרסאות וקבצים מערכתיים
+.git/
+.gcloudignore
+.gitignore
+GadiPublicRepo.git/
+
+# קבצים אישיים וקבצי סביבה
+replacements.txt
+.env
+
+# סביבת וירטואלית
+venv/
+env/
+.venv/
+new_env/
+venv_new/
+venv_clean/
+
+# קבצי פייתון מיותרים
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# תיקיות וכלי פיתוח
+.idea/
+
+# תיקיות בדיקה, תיעוד וקבצים שאינם דרושים להרצה
+tests/
+docs/
+audio_files/
+output/
+temp/
+uploads/
+whisperx-old-env/
+ffmpeg/
+
+# קבצי לוג ותיעוד
+*.log
+*.md

@@ -1,19 +1,16 @@
-runtime: python310
-entrypoint: gunicorn -b :$PORT --timeout=300 app:app
+runtime: custom
+env: flex
+
+entrypoint: gunicorn -k gevent -b :$PORT --timeout=900 --log-level debug app:app
 
 env_variables:
-  OPENAI_API_KEY: "YOUR_OPENAI_API_KEY"
-  HUGGING_FACE_TOKEN: "YOUR_HUGGING_FACE_TOKEN"
-
-handlers:
-- url: /favicon.ico
-  static_files: static/Transcription_AI_Gadi_Oren.ico
-  upload: static/Transcription_AI_Gadi_Oren.ico
-
-- url: /static
-  static_dir: static
-
-- url: /.*
-  script: auto
+  OPENAI_API_KEY: "YOUR_API_KEY"
+  HUGGING_FACE_TOKEN: "YOUR_HF_TOKEN"
 
 instance_class: F2
+
+resources:
+  disk_size_gb: 20
+
+readiness_check:
+  app_start_timeout_sec: 600

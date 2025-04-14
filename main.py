@@ -35,7 +35,7 @@ print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ STARTING")
 # Endpoint לטיפול בבקשות ל-favicon – מפנה את הבקשה לקובץ ה-ICO שב-static
 @app.get("/favicon.ico")
 async def favicon():
-    return RedirectResponse(url="/static/Transcription_AI_Gadi_Oren.ico")
+    return RedirectResponse(url="/STATIC/Transcription_AI_Gadi_Oren.ico")
 
 
 # הגשת דף HTML ראשי (ממשק משתמש) בכתובת /
