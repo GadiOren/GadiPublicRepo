@@ -1,1 +1,3 @@
-pywin32==9999.0.0; sys_platform != "win32"
+# Pin the gRPC wheels so that the resolver לא יתברבר בין מאות גרסאות
+grpcio==1.71.0
+grpcio-status==1.71.0
