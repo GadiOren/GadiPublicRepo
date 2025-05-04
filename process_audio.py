@@ -1,3 +1,7 @@
+import sys
+# מרשה עד 20000 קריאות רקורסיביות
+sys.setrecursionlimit(20000)
+
 import time
 import pandas as pd
 from TranscribeAI import process_audio_file, run_diarization, merge_word_and_segment_data
@@ -17,6 +21,8 @@ class AudioProcessor:
 
     def process(self):
         """ תהליך מלא של תמלול, זיהוי דוברים ותיקון תמלול """
+        print(f"[%s] התחלת עיבוד הקובץ: {self.file_path}" % self.processing_id)
+
         try:
             self.update_status("🔄 מעבד את הקובץ...")
             df_words, aligned_result = process_audio_file(self.file_path)

@@ -8,6 +8,35 @@ import math
 from chatGpt_Improvement import generate_title_summary_and_speakers, correct_transcription_and_summary
 from pyannote.audio import Pipeline
 
+# ─── ensure Hugging Face cache dir env var ────────────────────────────────────────  # ◀ ADDED
+HF_CACHE = os.getenv("HF_HOME", os.path.expanduser("~/.cache/huggingface"))            # ◀ ADDED
+os.environ["HF_HOME"] = HF_CACHE
+
+# הגדרות גלובליות
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+HUGGING_FACE_TOKEN = os.getenv("HUGGING_FACE_TOKEN") or "YOUR_HF_TOKEN"
+
+# משתנים גלובליים למודלים – יאתחלו במצב None (טעינה דלה)
+WHISPER_MODEL = None
+ALIGNMENT_MODEL = None
+METADATA = None
+DIARIZATION_PIPELINE = None
+
+
+import os
+import sys
+import subprocess
+import torch
+import whisperx
+import pandas as pd
+import math
+from chatGpt_Improvement import generate_title_summary_and_speakers, correct_transcription_and_summary
+from pyannote.audio import Pipeline
+
+# ─── ensure Hugging Face cache dir env var ────────────────────────────────────────  # ◀ ADDED
+HF_CACHE = os.getenv("HF_HOME", os.path.expanduser("~/.cache/huggingface"))            # ◀ ADDED
+os.environ["HF_HOME"] = HF_CACHE                                                        # ◀ ADDED
+
 # הגדרות גלובליות
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 HUGGING_FACE_TOKEN = os.getenv("HUGGING_FACE_TOKEN") or "YOUR_HF_TOKEN"
@@ -25,37 +54,49 @@ def lazy_load_models():
     במצב lazy – רק כאשר הם נדרשים לעיבוד האודיו.
     """
     global WHISPER_MODEL, ALIGNMENT_MODEL, METADATA, DIARIZATION_PIPELINE
+
+    # ─── ensure the faster‑whisper model is fully in cache ───────────────────────────  # ◀ ADDED
     if WHISPER_MODEL is None:
-        print("טעינת מודל WhisperX (lazy)...")
+        print("🔄 pre‑downloading faster‑whisper‑large‑v2 into cache…")                    # ◀ ADDED
+        try:
+            from huggingface_hub import snapshot_download                                  # ◀ ADDED
+            snapshot_download(                                                          # ◀ ADDED
+                repo_id="Systran/faster-whisper-large-v2",
+                cache_dir=HF_CACHE,
+                use_auth_token=HUGGING_FACE_TOKEN
+            )                                                                           # ◀ ADDED
+        except Exception as e:                                                          # ◀ ADDED
+            print(f"⚠️ failed to pre‑download model, will retry at load: {e}")          # ◀ ADDED
+
+    # ═══════════════ actual lazy loading ════════════════════════════════════════
+    if WHISPER_MODEL is None:
+        print("טעינת מודל WhisperX (lazy)…")
         WHISPER_MODEL = whisperx.load_model("large-v2", device=DEVICE, compute_type="float32")
     if ALIGNMENT_MODEL is None or METADATA is None:
-        print("טעינת מודל Alignment (lazy)...")
+        print("טעינת מודל Alignment (lazy)…")
         ALIGNMENT_MODEL, METADATA = whisperx.load_align_model(language_code="he", device=DEVICE)
     if DIARIZATION_PIPELINE is None:
-        print("טעינת מודל זיהוי דוברים (pyannote) (lazy)...")
+        print("טעינת מודל זיהוי דוברים (pyannote) (lazy)…")
         try:
-            DIARIZATION_PIPELINE = Pipeline.from_pretrained("pyannote/speaker-diarization",
-                                                            use_auth_token=HUGGING_FACE_TOKEN)
+            DIARIZATION_PIPELINE = Pipeline.from_pretrained(
+                "pyannote/speaker-diarization",
+                use_auth_token=HUGGING_FACE_TOKEN
+            )
             print("מודל זיהוי דוברים נטען בהצלחה!")
         except Exception as e:
             print("טעינת מודל זיהוי דוברים נכשלה:", e)
             DIARIZATION_PIPELINE = None
 
 
+# … the rest of the file is unchanged …
 def format_time(seconds):
-    """פורמט שניות ל-MM:SS להצגה ידידותית"""
     if seconds is None:
         return "N/A"
     m = int(seconds // 60)
     s = int(seconds % 60)
     return f"{m:02}:{s:02}"
 
-
 def assign_speakers_to_words(word_segments, speaker_segments):
-    """
-    משייך לכל מילה דובר על סמך זמן ההתחלה שלה.
-    עבור כל מילה, בודקים אם זמן ההתחלה נופל בתוך סגמנט של דובר.
-    """
     for word in word_segments:
         word_start = word.get("start", 0)
         word["speaker"] = "לא ידוע"
@@ -64,6 +105,8 @@ def assign_speakers_to_words(word_segments, speaker_segments):
                 word["speaker"] = seg["speaker"]
                 break
     return word_segments
+
+
 
 
 def run_diarization(abs_path):
@@ -122,8 +165,10 @@ def process_audio_file(file_path):
     # טעינה דחויה של המודלים – רק כאשר נדרש
     lazy_load_models()
 
-    print("🔹 מבצע תמלול ראשוני באמצעות WhisperX...")
+    print("🔹 מבצע load_audio ל WhisperX...")
     audio = whisperx.load_audio(abs_path)
+    print("🔹 מבצע תמלול ראשוני באמצעות WhisperX...")
+
     whisper_result = WHISPER_MODEL.transcribe(audio)
     print("🔹 מסיים תמלול. שפה:", whisper_result.get("language", "לא ידוע"))
 

@@ -8,7 +8,8 @@ import pandas as pd
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # יצירת מופע לקוח של OpenAI
-client = openai.OpenAI()
+#client = openai.OpenAI()
+client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 # נתיב לקובץ הפרומפטים בספריית STATIC
 PROMPTS_FILE_PATH = os.path.join("STATIC", "prompts.json")

@@ -1,25 +1,19 @@
 ﻿FROM python:3.10-slim
 
-# ─── System deps ──────────────────────────────────────────────────────────
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg && \
-    rm -rf /var/lib/apt/lists/*
-
-# ─── Python env tweaks ────────────────────────────────────────────────────
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1           \
-    # המיץ ↓ הlegacy resolver חוסך 20‑40 דקות, אבל אפשר להסירו אם תרצה
-    PIP_USE_DEPRECATED=legacy-resolver
-
+# מנקים cache, מעדכנים pip ומתקינים תלויות
 WORKDIR /app
+COPY requirements.txt .
+RUN pip install --upgrade pip \
+ && pip install -r requirements.txt
 
-# ─── Dependencies ────────────────────────────────────────────────────────
-COPY constraints.txt requirements.txt ./
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt   # משתמש אוטומטית ב‑constraints וב‑legacy
-
-# ─── App code ────────────────────────────────────────────────────────────
+# העברת קוד האפליקציה
 COPY . .
 
-CMD ["gunicorn", "-k", "gevent", "-b", ":$PORT", "--timeout=900", "--log-level", "debug", "app:app"]
+# משתני סביבה (לדוגמה)
+ENV PYTHONUNBUFFERED=1 \
+    PORT=8080
+
+EXPOSE 8080
+
+# נקודת הכניסה – תואם ל‑app.yaml
+CMD ["gunicorn", "-k", "gevent", "-b", ":8080", "--timeout=900", "--log-level", "debug", "app:app"]
